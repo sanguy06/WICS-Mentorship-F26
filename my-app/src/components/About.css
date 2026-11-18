@@ -1,0 +1,88 @@
+/* ==========================================================================
+   ABOUT (#about) — ONE solid colour, no gradient, no images, no cards.
+   Its colour is the same token the hero fade ends on (--color-about).
+   ========================================================================== */
+
+.about {
+  background-color: var(--color-about);
+  padding: clamp(88px, 10vw, 150px) 0 clamp(110px, 12vw, 180px);
+}
+
+/* Same container as the navbar + hero so all left edges line up. */
+.about__inner {
+  display: grid;
+  grid-template-columns: minmax(0, 4fr) minmax(0, 7fr);
+  column-gap: clamp(48px, 7vw, 120px);
+  max-width: var(--content-max);
+  margin: 0 auto;
+  padding: 0 var(--gutter);
+}
+
+.about__title {
+  font-family: var(--font-pixel);
+  font-weight: 700;
+  font-size: clamp(2.4rem, 3.8vw, 3.4rem);
+  line-height: 1.04;
+  letter-spacing: 0.01em;
+  color: var(--color-parchment);
+}
+
+.about__body > p:first-child {
+  max-width: 38em;
+  font-size: 1.22rem;
+  line-height: 1.8;
+  color: var(--color-mist);
+}
+
+.about__body strong {
+  font-weight: 600;
+  color: var(--color-parchment);
+}
+
+/* Demo scope — plain typography on the section background (no boxes). */
+.about__facts-label {
+  margin-top: 3rem;
+  font-family: var(--font-pixel);
+  font-weight: 500;
+  font-size: 0.9rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-slime);
+}
+
+.about__facts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem clamp(40px, 6vw, 88px);
+  margin-top: 1.25rem;
+}
+
+.about__fact {
+  display: flex;
+  flex-direction: column-reverse; /* show the number above its label */
+}
+
+.about__fact dd {
+  font-family: var(--font-pixel);
+  font-weight: 700;
+  font-size: 3rem;
+  line-height: 1;
+  color: var(--color-grass);
+}
+
+.about__fact dt {
+  margin-top: 0.55rem;
+  font-family: var(--font-pixel);
+  font-weight: 500;
+  font-size: 0.9rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-mist-dim);
+}
+
+@media (max-width: 900px) {
+  .about__inner {
+    grid-template-columns: 1fr;
+    row-gap: 1.75rem;
+  }
+}

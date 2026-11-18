@@ -1,0 +1,127 @@
+/* ==========================================================================
+   Wooden RPG button — pure CSS, no image assets.
+   Tricks used:
+   - Pixel outline: four hard box-shadows (up/down/left/right) leave the
+     corners empty, which gives the "notched" corners of pixel-art UI.
+   - Bevel: inset shadows (light top/left, dark bottom/right).
+   - Grain: a repeating gradient with hard colour stops (no blur = pixel look).
+   - Nails: the ::before / ::after pseudo-elements.
+   ========================================================================== */
+
+.wood-btn {
+  --px: 4px; /* size of one "pixel" in the art */
+  --drop: calc(var(--px) * 2.5); /* hard drop-shadow depth */
+  --glow: 0 0 0 transparent;
+
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin: var(--px); /* room for the outline so it is never clipped */
+  padding: 0.72em 1.9em 0.78em;
+
+  font-family: var(--font-pixel);
+  font-weight: 600;
+  font-size: 1.25rem;
+  line-height: 1;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: var(--wood-text);
+  text-shadow: 0 2px 0 #4a1f0b;
+  text-decoration: none;
+  cursor: pointer;
+  user-select: none;
+
+  background-color: var(--wood-mid);
+  background-image:
+    /* wood grain: thin dark + light streaks with hard edges */
+    repeating-linear-gradient(
+      to bottom,
+      transparent 0 6px,
+      rgb(70 28 8 / 0.2) 6px 8px,
+      transparent 8px 13px,
+      rgb(255 214 160 / 0.09) 13px 14px
+    ),
+    /* plank tone: sunlit top, darker bottom */
+    linear-gradient(to bottom, var(--wood-hi) 0%, var(--wood-mid) 55%, var(--wood-lo) 100%);
+
+  box-shadow:
+    /* pixel outline with notched corners */
+    0 calc(var(--px) * -1) 0 0 var(--wood-edge),
+    0 var(--px) 0 0 var(--wood-edge),
+    calc(var(--px) * -1) 0 0 0 var(--wood-edge),
+    var(--px) 0 0 0 var(--wood-edge),
+    /* bevel */
+    inset 0 var(--px) 0 0 rgb(255 214 160 / 0.45),
+    inset var(--px) 0 0 0 rgb(255 214 160 / 0.16),
+    inset 0 calc(var(--px) * -1.5) 0 0 rgb(60 24 8 / 0.55),
+    inset calc(var(--px) * -1) 0 0 0 rgb(60 24 8 / 0.3),
+    /* hard drop shadow + optional hover glow */
+    0 var(--drop) 0 0 rgb(0 0 0 / 0.38),
+    var(--glow);
+
+  transition:
+    transform 120ms ease,
+    box-shadow 120ms ease,
+    filter 120ms ease;
+}
+
+/* Nails on both ends of the plank */
+.wood-btn::before,
+.wood-btn::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  width: var(--px);
+  height: var(--px);
+  margin-top: calc(var(--px) / -2);
+  background: #3b1a0a;
+  box-shadow: 1px 1px 0 rgb(255 214 160 / 0.35);
+}
+
+.wood-btn::before {
+  left: calc(var(--px) * 2.5);
+}
+
+.wood-btn::after {
+  right: calc(var(--px) * 2.5);
+}
+
+.wood-btn:hover {
+  --drop: calc(var(--px) * 3.5);
+  --glow: 0 0 28px rgb(242 196 107 / 0.35);
+  filter: brightness(1.08) saturate(1.06);
+  transform: translateY(-2px);
+}
+
+.wood-btn:active {
+  --drop: var(--px);
+  filter: brightness(0.96);
+  transform: translateY(calc(var(--px) * 1.5));
+}
+
+.wood-btn:focus-visible {
+  outline: 3px solid var(--color-focus);
+  outline-offset: calc(var(--px) * 2 + 2px);
+}
+
+/* --- Sizes --------------------------------------------------------------- */
+
+.wood-btn--sm {
+  --px: 3px;
+  font-size: 0.95rem;
+  padding: 0.6em 1.5em 0.65em;
+}
+
+.wood-btn--lg {
+  --px: 5px;
+  font-size: 1.6rem;
+  padding: 0.75em 2.1em 0.8em;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wood-btn {
+    transition: none;
+  }
+}

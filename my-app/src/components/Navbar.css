@@ -1,0 +1,78 @@
+/* Fixed, translucent bar so the hero artwork shows through behind it. */
+.navbar {
+  position: fixed;
+  inset: 0 0 auto 0;
+  z-index: 50;
+  height: var(--nav-h);
+  background: rgb(var(--spruce-rgb) / 0.72);
+  -webkit-backdrop-filter: blur(12px) saturate(1.2);
+  backdrop-filter: blur(12px) saturate(1.2);
+  border-bottom: 1px solid rgb(243 233 210 / 0.08);
+  box-shadow: 0 6px 24px rgb(0 0 0 / 0.22);
+}
+
+.navbar-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 100%;
+  max-width: var(--content-max);
+  margin: 0 auto;
+  padding: 0 var(--gutter);
+}
+
+.navbar-logo {
+  font-family: var(--font-pixel);
+  font-weight: 600; /* 700 closes the "C" at this size; 600 stays legible */
+  font-size: 1.5rem;
+  letter-spacing: 0.02em;
+  color: var(--color-parchment);
+  text-decoration: none;
+  text-shadow: 0 2px 0 rgb(0 0 0 / 0.45);
+}
+
+.navbar-logo span {
+  color: var(--color-grass);
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 2.25rem;
+}
+
+.nav-link {
+  position: relative;
+  padding: 0.25rem 0;
+  font-family: var(--font-pixel);
+  font-weight: 500;
+  font-size: 1.05rem;
+  letter-spacing: 0.04em;
+  color: var(--color-mist);
+  text-decoration: none;
+  transition: color 150ms ease;
+}
+
+/* Pixel underline that "draws in" in four steps on hover */
+.nav-link::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -2px;
+  height: 3px;
+  background: var(--color-grass);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 200ms steps(4);
+}
+
+.nav-link:hover,
+.nav-link:focus-visible {
+  color: var(--color-parchment);
+}
+
+.nav-link:hover::after,
+.nav-link:focus-visible::after {
+  transform: scaleX(1);
+}
