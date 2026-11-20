@@ -1,0 +1,186 @@
+/* ==========================================================================
+   HERO (#home)
+   Stacking order inside the section (back → front):
+     .hero__bg     z -3  blurred, enlarged screenshot (Layer 1)
+     .hero__shade  z -2  left-side darkening for text readability
+     .hero__fade   z -1  bottom transition into the About colour
+     .hero__inner  z  0  title + copy + sharp screenshot (Layer 2)
+   ========================================================================== */
+
+.hero {
+  --hero-fade-h: clamp(190px, 30vh, 320px);
+
+  position: relative;
+  isolation: isolate; /* keeps the negative z-index layers inside the hero */
+  overflow: hidden; /* clips the blur bleed */
+  display: flex;
+  align-items: center;
+  min-height: max(100vh, 700px);
+  padding: calc(var(--nav-h) + 48px) 0 calc(var(--hero-fade-h) * 0.62);
+  background-color: var(--color-about); /* shown only while the image loads */
+}
+
+/* --- Layer 1: enlarged + blurred screenshot ----------------------------- */
+.hero__bg {
+  position: absolute;
+  inset: -48px; /* bleed past the edges so the blur never shows a soft rim */
+  z-index: -3;
+  background-size: cover;
+  background-position: 60% 55%;
+  background-repeat: no-repeat;
+  transform: scale(1.12);
+  filter: blur(12px) brightness(0.92) saturate(1.1);
+}
+
+/* --- Readability overlay (left side + under the navbar) ------------------ */
+.hero__shade {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  background:
+    /* soft pool of shadow right behind the copy */
+    radial-gradient(
+      ellipse 46% 60% at 20% 46%,
+      rgb(var(--spruce-rgb) / 0.6) 0%,
+      rgb(var(--spruce-rgb) / 0.28) 55%,
+      transparent 100%
+    ),
+    /* left → right darkening that is gone before the screenshot */
+    linear-gradient(
+      90deg,
+      rgb(var(--spruce-rgb) / 0.78) 0%,
+      rgb(var(--spruce-rgb) / 0.5) 28%,
+      rgb(var(--spruce-rgb) / 0.14) 52%,
+      transparent 68%
+    ),
+    /* a little depth under the navbar */
+    linear-gradient(to bottom, rgb(var(--spruce-rgb) / 0.4) 0%, transparent 20%);
+}
+
+/* --- Bottom transition into About ----------------------------------------
+   Smoothstep-shaped alpha curve: fully solid at the very bottom AND flat
+   there, so there is no visible "edge" line where About begins. */
+.hero__fade {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px; /* overlap 1px to avoid a sub-pixel hairline */
+  height: calc(var(--hero-fade-h) + 1px);
+  z-index: -1;
+  background: linear-gradient(
+    to top,
+    rgb(var(--spruce-rgb) / 1) 0%,
+    rgb(var(--spruce-rgb) / 0.972) 10%,
+    rgb(var(--spruce-rgb) / 0.896) 20%,
+    rgb(var(--spruce-rgb) / 0.784) 30%,
+    rgb(var(--spruce-rgb) / 0.648) 40%,
+    rgb(var(--spruce-rgb) / 0.5) 50%,
+    rgb(var(--spruce-rgb) / 0.352) 60%,
+    rgb(var(--spruce-rgb) / 0.216) 70%,
+    rgb(var(--spruce-rgb) / 0.104) 80%,
+    rgb(var(--spruce-rgb) / 0.028) 90%,
+    rgb(var(--spruce-rgb) / 0) 100%
+  );
+}
+
+/* --- Content grid --------------------------------------------------------- */
+.hero__inner {
+  display: grid;
+  grid-template-columns: minmax(0, 0.74fr) minmax(0, 1.26fr);
+  align-items: center;
+  gap: clamp(36px, 4.5vw, 72px);
+  width: 100%;
+  max-width: var(--content-max);
+  margin: 0 auto;
+  padding: 0 var(--gutter);
+}
+
+.hero__copy {
+  max-width: 30rem;
+}
+
+.hero__eyebrow {
+  font-family: var(--font-pixel);
+  font-weight: 500;
+  font-size: 0.95rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-slime);
+  text-shadow: 0 2px 0 rgb(0 0 0 / 0.5);
+}
+
+.hero__title {
+  margin: 0.3em 0 0.42em;
+  font-family: var(--font-pixel);
+  font-weight: 700;
+  font-size: clamp(3.4rem, 5.6vw, 5rem);
+  line-height: 0.95;
+  letter-spacing: 0.01em;
+  color: var(--color-parchment);
+  /* hard pixel shadow + soft halo for contrast */
+  text-shadow:
+    0 5px 0 rgb(var(--abyss-rgb) / 0.9),
+    0 0 36px rgb(0 0 0 / 0.5);
+}
+
+/* Always exactly two lines: "Farm the" / "Code" */
+.hero__title span {
+  display: block;
+  white-space: nowrap;
+}
+
+.hero__title-accent {
+  color: var(--color-grass);
+}
+
+.hero__intro {
+  margin-bottom: 2.25rem;
+  max-width: 27rem;
+  font-size: 1.15rem;
+  line-height: 1.7;
+  color: #dbe3de;
+  text-shadow: 0 1px 2px rgb(0 0 0 / 0.6);
+}
+
+/* --- Layer 2: sharp screenshot in a slim pixel/wood frame ----------------- */
+.hero__shot {
+  --px: 4px;
+  position: relative;
+  justify-self: end;
+  width: 100%;
+  max-width: 780px;
+  padding: var(--px);
+  background: linear-gradient(to bottom, var(--wood-hi), var(--wood-lo));
+  box-shadow:
+    /* pixel outline with notched corners (same language as the buttons) */
+    0 calc(var(--px) * -1) 0 0 var(--wood-edge),
+    0 var(--px) 0 0 var(--wood-edge),
+    calc(var(--px) * -1) 0 0 0 var(--wood-edge),
+    var(--px) 0 0 0 var(--wood-edge),
+    /* hard drop shadow, then a soft lift */
+    0 calc(var(--px) * 3) 0 0 rgb(0 0 0 / 0.35),
+    0 36px 80px -18px rgb(0 0 0 / 0.65),
+    /* light spill in the game's own grass tone, ties it to the blurred world */
+    0 0 140px 10px rgb(178 181 74 / 0.16);
+}
+
+.hero__shot img {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1162 / 654; /* original ratio — never stretched */
+}
+
+/* --- Narrow screens: simple stacked fallback (desktop is the priority) ---- */
+@media (max-width: 900px) {
+  .hero__inner {
+    grid-template-columns: 1fr;
+  }
+
+  .hero__copy {
+    max-width: none;
+  }
+
+  .hero__shot {
+    justify-self: stretch;
+  }
+}
