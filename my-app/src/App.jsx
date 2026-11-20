@@ -3,6 +3,7 @@ import Navbar from "./components/Navbar";
 import Hero from "./components/Hero";
 import About from "./components/About";
 import ForestPlay from "./components/ForestPlay";
+import GameSection from "./components/GameSection";
 
 /*
  * One continuous page — no router:
@@ -19,10 +20,10 @@ function App() {
         <Hero />
         <About />
         <ForestPlay />
-
         {/* GAME SECTION — reserved for Kira and the Game Development Team.
-            Intentionally empty: the playable game will be integrated here. */}
-        <section id="game" className="game-section" aria-label="Game" />
+            Intentionally empty: the playable game will be integrated here. 
+            <section id="game" className="game-section" aria-label="Game" />*/}
+        <GameSection />
       </main>
     </>
   );

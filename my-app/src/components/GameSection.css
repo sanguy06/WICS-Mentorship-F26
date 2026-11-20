@@ -1,0 +1,151 @@
+/* Game section — a centered "screen" holding a snapshot until the player
+   clicks, then the live game. Fills one screen below the navbar.
+   The Play label reuses .wood-btn (styles from WoodButton.css). */
+
+.game-section {
+  display: grid;
+  place-items: center;
+  min-height: max(640px, calc(100vh - var(--nav-h)));
+  padding: clamp(24px, 5vw, 64px) var(--gutter);
+  background-color: var(--color-game);
+}
+
+.game-stage {
+  --px: 5px;
+  position: relative;
+  width: min(100%, 1100px);
+  aspect-ratio: 16 / 9;
+  background: #000;
+  overflow: hidden;
+  /* Pixel frame with notched corners, matching the wood buttons. */
+  box-shadow:
+    0 calc(var(--px) * -1) 0 0 var(--wood-edge),
+    0 var(--px) 0 0 var(--wood-edge),
+    calc(var(--px) * -1) 0 0 0 var(--wood-edge),
+    var(--px) 0 0 0 var(--wood-edge),
+    0 calc(var(--px) * 4) 0 0 rgb(0 0 0 / 0.4);
+}
+
+/* In fullscreen the stage becomes the whole screen, but the game itself
+   stays 16:9 (the shape it was designed for) and is centered with black
+   bars — otherwise Godot fills the extra space on 16:10 screens with gray. */
+.game-stage:fullscreen {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+  aspect-ratio: auto;
+  box-shadow: none;
+}
+
+.game-stage:fullscreen .game-stage__frame {
+  width: min(100vw, 100vh * 16 / 9);
+  height: auto;
+  aspect-ratio: 16 / 9;
+}
+
+.game-stage__frame {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+/* --- Snapshot (before the game is loaded) ------------------------------ */
+
+.game-stage__poster {
+  display: block;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+}
+
+.game-stage__img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  image-rendering: pixelated;
+  transition: transform 300ms ease, filter 300ms ease;
+}
+
+.game-stage__overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  background: radial-gradient(
+    ellipse at center,
+    rgb(var(--abyss-rgb) / 0.25) 0%,
+    rgb(var(--abyss-rgb) / 0.65) 100%
+  );
+}
+
+.game-stage__hint {
+  font-family: var(--font-pixel);
+  font-size: 0.95rem;
+  letter-spacing: 0.05em;
+  color: var(--color-parchment);
+  text-shadow: 0 2px 0 rgb(0 0 0 / 0.6);
+}
+
+.game-stage__poster:hover .game-stage__img,
+.game-stage__poster:focus-visible .game-stage__img {
+  transform: scale(1.03);
+  filter: brightness(1.1);
+}
+
+.game-stage__poster:hover .wood-btn {
+  --drop: calc(var(--px) * 3.5);
+  --glow: 0 0 28px rgb(242 196 107 / 0.35);
+  filter: brightness(1.08) saturate(1.06);
+  transform: translateY(-2px);
+}
+
+.game-stage__poster:focus-visible {
+  outline: 3px solid var(--color-focus);
+  outline-offset: -3px;
+}
+
+/* --- Re-enter fullscreen (after Esc) ------------------------------------ */
+
+.game-stage__fs-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  padding: 6px 12px;
+  font-family: var(--font-pixel);
+  font-size: 0.85rem;
+  color: var(--wood-text);
+  background: rgb(0 0 0 / 0.55);
+  border: 2px solid var(--wood-mid);
+  cursor: pointer;
+  opacity: 0.7;
+  transition: opacity 150ms ease;
+}
+
+.game-stage__fs-btn:hover,
+.game-stage__fs-btn:focus-visible {
+  opacity: 1;
+}
+
+@media (max-width: 600px) {
+  .game-stage .wood-btn--lg {
+    font-size: 1.15rem;
+  }
+  .game-stage__hint {
+    font-size: 0.8rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .game-stage__img {
+    transition: none;
+  }
+}

@@ -1,9 +1,2 @@
 /* App-level styles. Each section's styles live next to its component
-   in /components (Hero.css, About.css, ForestPlay.css, ...). */
-
-/* Game section — blank, solid stage reserved for the Game Development Team.
-   It fills one screen below the navbar so "Play" lands on a full game area. */
-.game-section {
-  min-height: max(640px, calc(100vh - var(--nav-h)));
-  background-color: var(--color-game);
-}
+   in /components (Hero.css, About.css, ForestPlay.css, GameSection.css, ...). */
